@@ -64,12 +64,28 @@ async function run() {
         res.send(result);
     });
 
-    // POST API
-    // app.post('/user', async (req, res) => {
-    //     const newUser = req.body;
-    //     const result = await userCollection.insertOne(newUser);
-    //     res.send(result);
-    // });
+
+    app.post('/user', async (req, res) => {
+        const user = req.body;
+        const result = await userCollection.insertOne(user);
+        res.send(result);
+    });
+
+    app.patch('/user/:id', async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: new ObjectId(id) };
+        const updateDoc = {
+            $set: {
+                username: req.body.username,
+                email: req.body.email,
+                role: req.body.role
+            },
+        };
+        const result = await userCollection.updateOne(filter, updateDoc);
+        console.log(req.body);
+        
+        res.send(result);
+    });
 
 
   } catch (err) {
